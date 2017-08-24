@@ -12,6 +12,7 @@ secrets.tfvars
 *.tfstate.backup
 
 # Module directory
+modules/*
 .terraform/
 
 
