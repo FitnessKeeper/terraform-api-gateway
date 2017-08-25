@@ -44,12 +44,16 @@ resource "aws_api_gateway_method" "proxy-any" {
   http_method      = "ANY"
   authorization    = "NONE"
   api_key_required = false
+
+  request_parameters {
+    "method.request.path.proxy" = true
+  }
 }
 
 resource "aws_api_gateway_method_settings" "proxy-any" {
   rest_api_id = "${aws_api_gateway_rest_api.webapi.id}"
   stage_name  = "${aws_api_gateway_stage.prod.stage_name}"
-  method_path = "proxy"
+  method_path = "*/*"
 
   settings {
     metrics_enabled    = true
@@ -65,8 +69,12 @@ resource "aws_api_gateway_integration" "proxy-any" {
   http_method             = "${aws_api_gateway_method.proxy-any.http_method}"
   integration_http_method = "${aws_api_gateway_method.proxy-any.http_method}"
   type                    = "HTTP_PROXY"
-  passthrough_behavior    = "WHEN_NO_TEMPLATES"
-  uri                     = "https://lb.fitnesskeeperapi.com"
+  passthrough_behavior    = "WHEN_NO_MATCH"
+  uri                     = "https://lb.fitnesskeeperapi.com/{proxy}"
+
+  request_parameters {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }
 
 resource "aws_api_gateway_domain_name" "webapi" {
