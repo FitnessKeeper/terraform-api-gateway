@@ -14,7 +14,8 @@ secrets.tfvars
 # Module directory
 modules/*
 .terraform/
-
+_*
+.plan
 
 ### https://raw.github.com/github/gitignore/abad92dac5a4306f72242dae3bca6e277bce3615/Global/Vim.gitignore
 
@@ -28,5 +29,3 @@ Session.vim
 *~
 # auto-generated tag files
 tags
-
-
